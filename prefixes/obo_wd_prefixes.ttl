@@ -1,0 +1,16 @@
+@prefix sh:	<http://www.w3.org/ns/shacl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+[
+  sh:declare
+   [
+    sh:prefix "obo" ; 
+    sh:namespace "http://purl.obolibrary.org/obo/"
+   ] ,
+   [
+    sh:prefix "wd" ;
+    sh:namespace "http://www.wikidata.org/entity/"
+   ] 
+].
+    
+    
