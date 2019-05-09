@@ -63,7 +63,7 @@ matches/align-full-%.tsv: matches/match-%.ttl
 .PRECIOUS: matches/align-full-%.tsv
 
 matches/align-high-confidence-%.tsv: matches/align-full-%.tsv
-	awk -F"\t" '{ if ($$9 == "high") { print } }'  $< >  $@.tmp && mv $@.tmp $@
+	awk -F"\t" '{ if (NR==1 || $$9 == "high") { print } }'  $< >  $@.tmp && mv $@.tmp $@
 
 matches/align-unique-%.tsv: matches/match-%.ttl
 	rdfmatch -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl -d rdf_matcher -g remove_inexact_synonyms -i $* -i $< unique_match > $@.tmp && mv $@.tmp $@
