@@ -56,13 +56,16 @@ geonames/wd-fcodes.tsv:
 backup:
 	cp matches/wd-gaz-cache.ttl ~/Google\ Drive/OBO\ operations\ committee/OBO\ Gazetteer/gaz-data
 
+osf-backup:
+	osf -p unga9 upload -f matches/wd-gaz-cache.ttl wd-gaz-all-matches.ttl
+
 matches/match-%.ttl:
 	wd-ontomatch  -d ontomatcher -i $* -a wikidata_ontomatcher:save_frequency=0.02 -a wikidata_ontomatcher:cached_db_file=matches/wd-$*-cache.ttl match_all && cp matches/wd-$*-cache.ttl $@
 
 .PRECIOUS: matches/match-%.ttl
 
 matches/align-full-%.tsv: matches/match-%.ttl
-	rdfmatch -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl -d rdf_matcher -g remove_inexact_synonyms -i $* -i $< exact > $@.tmp && mv $@.tmp $@
+	rdfmatch -G matches/align-full-$*.ttl -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl  -d rdf_matcher -g remove_inexact_synonyms -i $* -i $< exact > $@.tmp && mv $@.tmp $@
 .PRECIOUS: matches/align-full-%.tsv
 
 matches/align-high-confidence-%.tsv: matches/align-full-%.tsv
