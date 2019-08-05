@@ -71,6 +71,11 @@ matches/align-full-%.tsv: matches/match-%.ttl
 matches/align-high-confidence-%.tsv: matches/align-full-%.tsv
 	awk -F"\t" '{ if (NR==1 || $$9 == "high") { print } }'  $< | grep -v 'Wikimedia disambiguation page' >  $@.tmp && mv $@.tmp $@
 
+matches/align-high-confidence-%.ttl: matches/align-high-confidence-%.tsv
+	./util/tsv2ttl.pl $< > $@
+matches/curated-high-confidence-%.ttl: matches/curated-high-confidence-%.tsv
+	./util/tsv2ttl.pl $< > $@
+
 matches/align-unique-%.tsv: matches/match-%.ttl
 	rdfmatch -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl -d rdf_matcher -g remove_inexact_synonyms -i $* -i $< unique_match > $@.tmp && mv $@.tmp $@
 
@@ -80,3 +85,7 @@ matches/align-all-%.tsv: matches/match-%.ttl
 
 matches/no-align-%.tsv: matches/match-%.ttl
 	rdfmatch -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl -i $* -i $< unmatched obo > $@.tmp && mv $@.tmp $@
+
+matches/gaz-to-envo.tsv:
+	pl2sparql -A ~/repos/onto-mirror/void.ttl -f tsv -l -i envo -i gaz   -u sparqlprog_wikidata -e -i matches/wd-gaz-cache.ttl -i matches/curated-high-confidence-envo.ttl -i matches/align-high-confidence-gaz.ttl -c util/gaz2envo.pro gaz2envo  > $@.tmp && sort -u $@.tmp > $@
+
