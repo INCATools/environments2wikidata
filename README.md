@@ -27,9 +27,9 @@ For more details and contex, see the following tickets:
 
 ## Results
 
- * [curated-high-confidence-envo.tsv](https://github.com/cmungall/environments2wikidata/blob/master/matches/curated-high-confidence-envo.tsv)
- * [align-high-confidence-gaz.tsv](https://github.com/cmungall/environments2wikidata/blob/master/matches/align-high-confidence-gaz.tsv)
- * [gaz-to-envo.tsv](https://github.com/cmungall/environments2wikidata/blob/master/matches/gaz-to-envo.tsv)
+ * [curated-high-confidence-envo.tsv](https://github.com/cmungall/environments2wikidata/blob/master/matches/curated-high-confidence-envo.tsv) (~1k)
+ * [align-high-confidence-gaz.tsv](https://github.com/cmungall/environments2wikidata/blob/master/matches/align-high-confidence-gaz.tsv) (~167k)
+ * [gaz-to-envo.tsv](https://github.com/cmungall/environments2wikidata/blob/master/matches/gaz-to-envo.tsv) (~26k)
 
 Note that intermediate results of first pass search of GAZ is store on OSF:
 
@@ -62,3 +62,7 @@ Due to the conservative nature of both mappings we only get a fraction of GAZ en
 ## Future
 
 We plan to use the conservative mappings to further boost results using kBOOM.
+
+We also want to upload mappings to wikidata and have the community help extend mappings.
+
+Also: GAZ to geonames.
