@@ -57,7 +57,7 @@ backup:
 	cp matches/wd-gaz-cache.ttl ~/Google\ Drive/OBO\ operations\ committee/OBO\ Gazetteer/gaz-data
 
 matches/match-%.ttl:
-	wd-ontomatch  -d ontomatcher -i $* -a wikidata_ontomatcher:save_frequency=0.05 -a wikidata_ontomatcher:cached_db_file=matches/wd-$*-cache.ttl match_all && cp matches/wd-$*-cache.ttl $@
+	wd-ontomatch  -d ontomatcher -i $* -a wikidata_ontomatcher:save_frequency=0.02 -a wikidata_ontomatcher:cached_db_file=matches/wd-$*-cache.ttl match_all && cp matches/wd-$*-cache.ttl $@
 
 .PRECIOUS: matches/match-%.ttl
 
