@@ -65,7 +65,7 @@ matches/match-%.ttl:
 .PRECIOUS: matches/match-%.ttl
 
 matches/align-full-%.tsv: matches/match-%.ttl
-	rdfmatch -G matches/align-full-$*.ttl -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl  -d rdf_matcher -g remove_inexact_synonyms -i $* -i $< exact > $@.tmp && mv $@.tmp $@
+	rdfmatch -T -G matches/align-full-$*.ttl -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl  -d rdf_matcher -g remove_inexact_synonyms -i $* -i $< exact > $@.tmp && mv $@.tmp $@
 .PRECIOUS: matches/align-full-%.tsv
 
 matches/align-high-confidence-%.tsv: matches/align-full-%.tsv
@@ -79,6 +79,20 @@ matches/curated-high-confidence-%.ttl: matches/curated-high-confidence-%.tsv
 matches/align-unique-%.tsv: matches/match-%.ttl
 	rdfmatch -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl -d rdf_matcher -g remove_inexact_synonyms -i $* -i $< unique_match > $@.tmp && mv $@.tmp $@
 
+#matches/ids-%.tsv: matches/align-full-%.ttl
+#	arq  --data $< --query labels.rq --results TSV > $@
+##	robot query -vvv -i $< -q labels.rq $@
+
+matches/ids-%.tsv: matches/curated-high-confidence-%.tsv
+	cut -f3 $< > $@
+
+matches/wd-ont-%.ttl: matches/match-%.ttl
+	pl2sparql -e -i $< -g "rdf_retractall(_,skos:closeMatch,_)" save $@
+
+# See https://github.com/ontodev/robot/issues/557
+matches/%-module.owl: matches/ids-%.tsv matches/wd-ont-%.ttl
+	robot annotate -i  matches/wd-ont-$*.ttl -O http://x.org/extract/$*.ttl extract --individuals minimal -p 'wd: http://www.wikidata.org/entity/'  -T $< -m BOT annotate -O http://x.org/$* -o $@
+##	robot extract -vvv -i matches/match-$*.ttl -T $< -m BOT annotate -O http://x.org/$* -o $@
 
 matches/align-all-%.tsv: matches/match-%.ttl
 	rdfmatch -f tsv -l -i prefixes/obo_wd_prefixes.ttl -A ~/repos/onto-mirror/void.ttl -i $* -i $< new_match > $@.tmp && mv $@.tmp $@
