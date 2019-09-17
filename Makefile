@@ -86,12 +86,19 @@ matches/align-unique-%.tsv: matches/match-%.ttl
 matches/ids-%.tsv: matches/curated-high-confidence-%.tsv
 	cut -f3 $< > $@
 
+matches/ids-%.pro: matches/ids-%.tsv
+	tbl2p -p seed $< > $@
+
+matches/wd-enriched-%.ttl: matches/ids-%.pro
+	wd-ontomatch -d ontomatcher --consult $< "extract_and_save('$@')"
+
 matches/wd-ont-%.ttl: matches/match-%.ttl
 	pl2sparql -e -i $< -g "rdf_retractall(_,skos:closeMatch,_)" save $@
 
 # See https://github.com/ontodev/robot/issues/557
-matches/%-module.owl: matches/ids-%.tsv matches/wd-ont-%.ttl
-	robot annotate -i  matches/wd-ont-$*.ttl -O http://x.org/extract/$*.ttl extract --individuals minimal -p 'wd: http://www.wikidata.org/entity/'  -T $< -m BOT annotate -O http://x.org/$* -o $@
+#matches/%-module.owl: matches/ids-%.tsv matches/wd-ont-%.ttl
+matches/%-module.owl: matches/ids-%.tsv matches/match-%.ttl
+	robot annotate -i  matches/match-$*.ttl -O http://x.org/extract/$*.ttl extract --individuals minimal -p 'wd: http://www.wikidata.org/entity/'  -T $< -m BOT annotate -O http://x.org/$* -o $@
 ##	robot extract -vvv -i matches/match-$*.ttl -T $< -m BOT annotate -O http://x.org/$* -o $@
 
 matches/align-all-%.tsv: matches/match-%.ttl
