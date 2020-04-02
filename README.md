@@ -13,7 +13,7 @@ The resulting mappings can connect GAZ to ENVO, as per the following schema:
       skos:match                      skos:match
          |                              |
          |                              |
-   GAZ:<GAZ_ID>    ---[rdf:type]-->   wikidata:<PlaceType>
+   GAZ:<GAZ_ID>    ---[rdf:type]-->   ENVO:<ENVO_ID>
                       (inferred)
 
 
